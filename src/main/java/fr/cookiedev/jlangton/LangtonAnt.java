@@ -9,9 +9,9 @@ public class LangtonAnt {
 	}
 
 	public long move(long fromPos) {
-		final boolean valueFrom = this.langtonMap.get(fromPos);
-		final long toPos = valueFrom ? this.langtonMap.toRight(fromPos) : this.langtonMap.toLeft(fromPos);
-		this.langtonMap.set(fromPos, !valueFrom);
+		final boolean valueFrom = langtonMap.get(fromPos);
+		final long toPos = valueFrom ? langtonMap.toRight(fromPos) : langtonMap.toLeft(fromPos);
+		langtonMap.set(fromPos, !valueFrom);
 		return toPos;
 	}
 

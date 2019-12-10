@@ -1,10 +1,12 @@
-package fr.cookiedev.jlangton;
+package fr.cookiedev.jlangton.core;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import fr.cookiedev.jlangton.core.RectLangtonMapImpl;
 
 class RectLangtonMapImplTest {
 

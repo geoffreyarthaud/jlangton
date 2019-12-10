@@ -1,4 +1,4 @@
-package fr.cookiedev.jlangton;
+package fr.cookiedev.jlangton.core;
 
 public interface LangtonMap {
 

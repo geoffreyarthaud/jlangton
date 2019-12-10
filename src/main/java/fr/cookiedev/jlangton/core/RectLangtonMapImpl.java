@@ -1,4 +1,4 @@
-package fr.cookiedev.jlangton;
+package fr.cookiedev.jlangton.core;
 
 import java.text.MessageFormat;
 import java.util.BitSet;
@@ -70,6 +70,18 @@ public class RectLangtonMapImpl implements LangtonMap {
 
 	public int getXSize() {
 		return xSize;
+	}
+
+	public BitSet getGrid() {
+		return grid;
+	}
+
+	public int getxOrientation() {
+		return xOrientation;
+	}
+
+	public int getyOrientation() {
+		return yOrientation;
 	}
 
 	private int checkRangePositiveInteger(long value) {

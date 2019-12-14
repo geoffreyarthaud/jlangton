@@ -17,11 +17,14 @@ public class LangtonStepTest {
 	@Mock
 	LangtonMap langtonMap;
 
+	@Mock
+	LangtonPath langtonPath;
+
 	LangtonAnt langtonAnt;
 
 	@BeforeEach
 	public void initAnt() {
-		langtonAnt = new LangtonAnt(langtonMap);
+		langtonAnt = new LangtonAnt(langtonMap, langtonPath);
 	}
 
 	@Test

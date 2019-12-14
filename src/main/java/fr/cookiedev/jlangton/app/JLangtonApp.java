@@ -1,5 +1,6 @@
 package fr.cookiedev.jlangton.app;
 
+import fr.cookiedev.jlangton.core.BitSetLangtonPathImpl;
 import fr.cookiedev.jlangton.core.LangtonAnt;
 import fr.cookiedev.jlangton.core.RectLangtonMapImpl;
 import javafx.animation.AnimationTimer;
@@ -28,7 +29,7 @@ public class JLangtonApp extends Application {
 
 		final Canvas canvas = new Canvas(W_SCREEN, H_SCREEN);
 		final RectLangtonMapImpl langtonMap = new RectLangtonMapImpl(W_MAP, H_MAP);
-		final LangtonAnt langtonAnt = new LangtonAnt(langtonMap);
+		final LangtonAnt langtonAnt = new LangtonAnt(langtonMap, new BitSetLangtonPathImpl());
 		final AnimationTimer timer = new AnimationTimer() {
 			long langtonPos = W_MAP * H_MAP / 2 + W_MAP / 2;
 			long iteration = 0;

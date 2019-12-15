@@ -56,4 +56,23 @@ public class BitSetLangtonPathImpl implements LangtonPath {
 		return isCycling() ? (size - cyclingStart - CYCLE_LENGTH) / CYCLE_LENGTH : 0;
 	}
 
+	@Override
+	public String getPath(long from, long length) {
+		final StringBuffer buffer = new StringBuffer((int) length);
+		final BitSet subPath = path.get((int) from, (int) from + (int) length);
+		for (int i = 0; i < length; i++) {
+			buffer.append(subPath.get(i) ? '1' : '0');
+		}
+		return buffer.toString();
+	}
+
+	@Override
+	public String getPath() {
+		final StringBuffer buffer = new StringBuffer(size);
+		for (int i = 0; i < size; i++) {
+			buffer.append(path.get(i) ? '1' : '0');
+		}
+		return buffer.toString();
+	}
+
 }

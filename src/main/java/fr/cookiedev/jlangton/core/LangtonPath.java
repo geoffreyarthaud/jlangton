@@ -14,4 +14,8 @@ public interface LangtonPath {
 
 	public long getNbCycles();
 
+	public String getPath(long from, long length);
+
+	public String getPath();
+
 }

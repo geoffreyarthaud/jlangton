@@ -44,7 +44,7 @@ public class JLangtonApp extends Application {
 				gc.setFill(Color.FORESTGREEN);
 				for (int coord = 0; coord < W_MAP * H_MAP; coord++) {
 					if (langtonMap.getGrid().get(coord)) {
-						gc.fillRect(coord % W_MAP * RATIO, coord / W_MAP * RATIO, RATIO, RATIO);
+						gc.fillRect(coord % W_MAP * RATIO, W_SCREEN - RATIO - coord / W_MAP * RATIO, RATIO, RATIO);
 					}
 				}
 				gc.fillText("n = " + iteration, 30, 30);

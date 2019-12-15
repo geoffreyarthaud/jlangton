@@ -41,14 +41,17 @@ public class BitSetLangtonPathImpl implements LangtonPath {
 		return buffer.toString();
 	}
 
+	@Override
 	public boolean isCycling() {
 		return size - cyclingStart - CYCLE_LENGTH >= CYCLE_LENGTH;
 	}
 
+	@Override
 	public long getCyclingStart() {
 		return cyclingStart;
 	}
 
+	@Override
 	public long getNbCycles() {
 		return isCycling() ? (size - cyclingStart - CYCLE_LENGTH) / CYCLE_LENGTH : 0;
 	}

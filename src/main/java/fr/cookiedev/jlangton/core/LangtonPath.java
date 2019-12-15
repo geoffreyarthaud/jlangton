@@ -8,4 +8,10 @@ public interface LangtonPath {
 
 	void add(boolean b);
 
+	public boolean isCycling();
+
+	public long getCyclingStart();
+
+	public long getNbCycles();
+
 }

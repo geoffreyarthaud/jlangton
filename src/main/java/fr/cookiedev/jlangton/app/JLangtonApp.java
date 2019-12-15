@@ -29,11 +29,12 @@ public class JLangtonApp extends Application {
 
 		final Canvas canvas = new Canvas(W_SCREEN, H_SCREEN);
 		final RectLangtonMapImpl langtonMap = new RectLangtonMapImpl(W_MAP, H_MAP);
-		final LangtonAnt langtonAnt = new LangtonAnt(langtonMap, new BitSetLangtonPathImpl());
+		final BitSetLangtonPathImpl path = new BitSetLangtonPathImpl();
+		final LangtonAnt langtonAnt = new LangtonAnt(langtonMap, path);
 		final AnimationTimer timer = new AnimationTimer() {
 			long langtonPos = W_MAP * H_MAP / 2 + W_MAP / 2;
 			long iteration = 0;
-			int delta = 4;
+			int delta = 8;
 
 			@Override
 			public void handle(long now) {
@@ -47,6 +48,8 @@ public class JLangtonApp extends Application {
 					}
 				}
 				gc.fillText("n = " + iteration, 30, 30);
+				gc.fillText("Cycles = " + path.getNbCycles(), 30, 50);
+				gc.fillText("Cycle started at = " + path.getCyclingStart(), 30, 60);
 				langtonPos = langtonAnt.move(langtonPos, delta);
 				iteration += delta;
 			}

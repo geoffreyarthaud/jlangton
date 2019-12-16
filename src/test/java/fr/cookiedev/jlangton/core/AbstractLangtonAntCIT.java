@@ -6,25 +6,34 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-public class LangtonAntCITest {
-	private static final int X_SIZE = 1024;
-	private static final int Y_SIZE = 1024;
-	private static final int INIT_POS = Y_SIZE / 2 * X_SIZE + X_SIZE / 2;
-	private static final String CYCLE_PATH = "10110000110110000110000110100001011110000100100001111010000100001111010000101100111100110000110010110110";
-	private LangtonAnt langtonAnt;
+public abstract class AbstractLangtonAntCIT {
+	public static final int X_SIZE = 1024;
+	public static final int Y_SIZE = 1024;
+	public static final int INIT_POS = Y_SIZE / 2 * X_SIZE + X_SIZE / 2;
+	public static final String CYCLE_PATH = "10110000110110000110000110100001011110000100100001111010000100001111010000101100111100110000110010110110";
+	private final Supplier<CartesianLangtonMap> langtonMapSupplier;
+	private final Supplier<LangtonPath> langtonPathSupplier;
+	private CartesianLangtonMap langtonMap;
 	private LangtonPath langtonPath;
-	private LangtonMap langtonMap;
+	private LangtonAnt langtonAnt;
+
+	public AbstractLangtonAntCIT(Supplier<CartesianLangtonMap> langtonMapSupplier,
+			Supplier<LangtonPath> langtonPathSupplier) {
+		this.langtonMapSupplier = langtonMapSupplier;
+		this.langtonPathSupplier = langtonPathSupplier;
+	}
 
 	@BeforeEach
 	public void initComponent() {
-		langtonMap = new RectLangtonMapImpl(X_SIZE, Y_SIZE);
-		langtonPath = new BitSetLangtonPathImpl();
+		langtonMap = langtonMapSupplier.get();
+		langtonPath = langtonPathSupplier.get();
 		langtonAnt = new LangtonAnt(langtonMap, langtonPath);
 	}
 
@@ -70,8 +79,10 @@ public class LangtonAntCITest {
 		}
 
 		for (int i = cycleLength; i < posRecorder.size(); i++) {
-			assertThat(posRecorder.get(i) % X_SIZE - posRecorder.get(i - cycleLength) % X_SIZE).isEqualTo(2);
-			assertThat(posRecorder.get(i) / X_SIZE - posRecorder.get(i - cycleLength) / X_SIZE).isEqualTo(-2);
+			assertThat(langtonMap.toX(posRecorder.get(i)) - langtonMap.toX(posRecorder.get(i - cycleLength)))
+					.isEqualTo(2);
+			assertThat(langtonMap.toY(posRecorder.get(i)) - langtonMap.toY(posRecorder.get(i - cycleLength)))
+					.isEqualTo(-2);
 		}
 
 	}

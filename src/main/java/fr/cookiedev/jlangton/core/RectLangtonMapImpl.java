@@ -3,17 +3,13 @@ package fr.cookiedev.jlangton.core;
 import java.text.MessageFormat;
 import java.util.BitSet;
 
-public class RectLangtonMapImpl implements LangtonMap {
+public class RectLangtonMapImpl extends AbstractRectLangtonMap {
 
 	private final int xSize;
 
 	private final int ySize;
 
 	private final BitSet grid;
-
-	private int xOrientation;
-
-	private int yOrientation;
 
 	public RectLangtonMapImpl(int xSize, int ySize) {
 		checkRangePositiveInteger(xSize);
@@ -22,8 +18,6 @@ public class RectLangtonMapImpl implements LangtonMap {
 		this.xSize = xSize;
 		this.ySize = ySize;
 		grid = new BitSet(xSize * ySize);
-		xOrientation = 0;
-		yOrientation = 1;
 	}
 
 	@Override
@@ -41,13 +35,10 @@ public class RectLangtonMapImpl implements LangtonMap {
 		final int intPos = rangeGrid(fromPos);
 		final int xPos = intPos % xSize;
 		final int yPos = intPos / xSize;
-
-		// Rotate by 90 degrees
-		final int tmpX = xOrientation;
-		xOrientation = -yOrientation;
-		yOrientation = tmpX;
-
-		return xPos + xOrientation + (yPos + yOrientation) * xSize;
+		final long resultPos = toLeft(xPos, yPos);
+		final int resultPosX = (int) (resultPos >> 32);
+		final int resultPosY = (int) resultPos;
+		return resultPosX + resultPosY * xSize;
 	}
 
 	@Override
@@ -55,13 +46,22 @@ public class RectLangtonMapImpl implements LangtonMap {
 		final int intPos = rangeGrid(fromPos);
 		final int xPos = intPos % xSize;
 		final int yPos = intPos / xSize;
+		final long resultPos = toRight(xPos, yPos);
+		final int resultPosX = (int) (resultPos >> 32);
+		final int resultPosY = (int) resultPos;
+		return resultPosX + resultPosY * xSize;
+	}
 
-		// Rotate by -90 degrees
-		final int tmpX = xOrientation;
-		xOrientation = yOrientation;
-		yOrientation = -tmpX;
+	@Override
+	public int toX(long pos) {
+		final int intPos = rangeGrid(pos);
+		return intPos % xSize;
+	}
 
-		return xPos + xOrientation + (yPos + yOrientation) * xSize;
+	@Override
+	public int toY(long pos) {
+		final int intPos = rangeGrid(pos);
+		return intPos / xSize;
 	}
 
 	public int getYSize() {
@@ -74,14 +74,6 @@ public class RectLangtonMapImpl implements LangtonMap {
 
 	public BitSet getGrid() {
 		return grid;
-	}
-
-	public int getxOrientation() {
-		return xOrientation;
-	}
-
-	public int getyOrientation() {
-		return yOrientation;
 	}
 
 	private int checkRangePositiveInteger(long value) {

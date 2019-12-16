@@ -87,6 +87,49 @@ public abstract class AbstractLangtonAntCIT {
 
 	}
 
+	@Test
+	public void testCycleBoxSize() {
+		// GIVEN
+		final int expectedCyclingStart = 9977;
+		final int cycleLength = 104;
+		final String expectedCycleMap = "111100\n" +
+				"001000\n" +
+				"101000\n" +
+				"100100\n" +
+				"110100\n" +
+				"011000\n" +
+				"110000\n" +
+				"000000\n" +
+				"000000\n";
+
+		// WHEN
+		long pos = langtonAnt.move(langtonMap.fromXY(X_SIZE / 2, Y_SIZE / 2), expectedCyclingStart - 1);
+		int xMin = Integer.MAX_VALUE;
+		int yMin = Integer.MAX_VALUE;
+		int xMax = Integer.MIN_VALUE;
+		int yMax = Integer.MIN_VALUE;
+		String cycleMap = "";
+		for (int v = 522; v >= 514; v--) {
+			for (int u = 526; u <= 531; u++) {
+				cycleMap += langtonMap.get(langtonMap.fromXY(u, v)) ? "1" : "0";
+			}
+			cycleMap += "\n";
+		}
+		assertThat(cycleMap).isEqualTo(expectedCycleMap);
+
+		for (int i = 0; i < cycleLength; i++) {
+			pos = langtonAnt.move(pos);
+			final int xPos = langtonMap.toX(pos);
+			final int yPos = langtonMap.toY(pos);
+			xMin = Math.min(xMin, xPos);
+			xMax = Math.max(xMax, xPos);
+			yMin = Math.min(yMin, yPos);
+			yMax = Math.max(yMax, yPos);
+		}
+		assertThat(xMax - xMin + 1).isEqualTo(6);
+		assertThat(yMax - yMin + 1).isEqualTo(9);
+	}
+
 	@ParameterizedTest(name = "Given an initial config {0} then get correct ant cycle after permutation")
 	@ValueSource(chars = { 0, 61011, 20854, 30087, 61575, 5691, 20927, 59656, 4206, 4639, 45742, 39478, 39445, 4510,
 			23768, 17838, 38257, 54844, 34792, 61309 })

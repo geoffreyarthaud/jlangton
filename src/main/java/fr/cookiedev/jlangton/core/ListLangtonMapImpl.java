@@ -45,4 +45,9 @@ public class ListLangtonMapImpl extends AbstractRectLangtonMap {
 		return (int) pos;
 	}
 
+	@Override
+	public long fromXY(int x, int y) {
+		return encode(x, y);
+	}
+
 }

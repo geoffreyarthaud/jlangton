@@ -29,7 +29,7 @@ public abstract class AbstractRectLangtonMap implements CartesianLangtonMap {
 		return encode(x + xOrientation, y + yOrientation);
 	}
 
-	private long encode(int x, int y) {
+	protected long encode(int x, int y) {
 		return (long) x << 32 | y;
 	}
 

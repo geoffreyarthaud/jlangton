@@ -89,4 +89,9 @@ public class RectLangtonMapImpl extends AbstractRectLangtonMap {
 		return checkRangePositiveInteger(value) % (xSize * ySize);
 	}
 
+	@Override
+	public long fromXY(int x, int y) {
+		return (long) y * xSize + x;
+	}
+
 }

@@ -50,4 +50,19 @@ public class ListLangtonMapImpl extends AbstractRectLangtonMap {
 		return encode(x, y);
 	}
 
+	@Override
+	public long prev(long pos) {
+		return prev(toX(pos), toY(pos));
+	}
+
+	@Override
+	public long backLeft(long fromPos) {
+		return backLeft(toX(fromPos), toY(fromPos));
+	}
+
+	@Override
+	public long backRight(long fromPos) {
+		return backRight(toX(fromPos), toY(fromPos));
+	}
+
 }

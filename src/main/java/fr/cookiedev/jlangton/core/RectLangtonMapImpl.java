@@ -26,6 +26,33 @@ public class RectLangtonMapImpl extends AbstractRectLangtonMap {
 	}
 
 	@Override
+	public long prev(long fromPos) {
+		final int intPos = rangeGrid(fromPos);
+		final int xPos = intPos % xSize;
+		final int yPos = intPos / xSize;
+		final long prevPos = prev(xPos, yPos);
+		return fromXY(prevPos >> 32, prevPos);
+	}
+
+	@Override
+	public long backLeft(long fromPos) {
+		final int intPos = rangeGrid(fromPos);
+		final int xPos = intPos % xSize;
+		final int yPos = intPos / xSize;
+		final long resultPos = backLeft(xPos, yPos);
+		return fromXY(resultPos >> 32, resultPos);
+	}
+
+	@Override
+	public long backRight(long fromPos) {
+		final int intPos = rangeGrid(fromPos);
+		final int xPos = intPos % xSize;
+		final int yPos = intPos / xSize;
+		final long resultPos = backRight(xPos, yPos);
+		return fromXY(resultPos >> 32, resultPos);
+	}
+
+	@Override
 	public void set(long pos, boolean value) {
 		grid.set(rangeGrid(pos), value);
 	}
@@ -92,6 +119,10 @@ public class RectLangtonMapImpl extends AbstractRectLangtonMap {
 	@Override
 	public long fromXY(int x, int y) {
 		return (long) y * xSize + x;
+	}
+
+	private long fromXY(long x, long y) {
+		return fromXY((int) x, (int) y);
 	}
 
 }

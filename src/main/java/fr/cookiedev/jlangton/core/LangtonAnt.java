@@ -25,6 +25,21 @@ public class LangtonAnt {
 		return fromPos;
 	}
 
+	public long back(long fromPos) {
+		final boolean valueFrom = langtonMap.get(langtonMap.prev(fromPos));
+		final long toPos = valueFrom ? langtonMap.backLeft(fromPos) : langtonMap.backRight(fromPos);
+		// langtonPath.add(valueFrom);
+		langtonMap.set(toPos, !valueFrom);
+		return toPos;
+	}
+
+	public long back(long fromPos, long nbMove) {
+		for (; nbMove > 0; nbMove--) {
+			fromPos = back(fromPos);
+		}
+		return fromPos;
+	}
+
 	public LangtonPath getPath() {
 		return langtonPath;
 	}

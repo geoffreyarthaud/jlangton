@@ -6,8 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import fr.cookiedev.jlangton.core.RectLangtonMapImpl;
-
 class RectLangtonMapImplTest {
 
 	private RectLangtonMapImpl rectLangtonMapImpl;
@@ -75,6 +73,58 @@ class RectLangtonMapImplTest {
 
 		// THEN
 		assertThat(pos).isEqualTo(fromPos - 1);
+	}
+
+	@Test
+	public void givenToLeft_whenPrev_thenGetOrigin() {
+		// GIVEN
+		final long originPos = 128;
+		final long fromPos = rectLangtonMapImpl.toLeft(originPos);
+
+		// WHEN
+		final long toPos = rectLangtonMapImpl.prev(fromPos);
+
+		// THEN
+		assertThat(toPos).isEqualTo(originPos);
+	}
+
+	@Test
+	public void givenToLeft_whenBackLeft_thenGetOrigin() {
+		// GIVEN
+		final long originPos = 128;
+		final long fromPos = rectLangtonMapImpl.toLeft(originPos);
+
+		// WHEN
+		final long toPos = rectLangtonMapImpl.backLeft(fromPos);
+
+		// THEN
+		assertThat(toPos).isEqualTo(originPos);
+	}
+
+	@Test
+	public void givenToRight_whenPrev_thenGetOrigin() {
+		// GIVEN
+		final long originPos = 128;
+		final long fromPos = rectLangtonMapImpl.toRight(originPos);
+
+		// WHEN
+		final long toPos = rectLangtonMapImpl.prev(fromPos);
+
+		// THEN
+		assertThat(toPos).isEqualTo(originPos);
+	}
+
+	@Test
+	public void givenToRight_whenBackRight_thenGetOrigin() {
+		// GIVEN
+		final long originPos = 128;
+		final long fromPos = rectLangtonMapImpl.toRight(originPos);
+
+		// WHEN
+		final long toPos = rectLangtonMapImpl.backLeft(fromPos);
+
+		// THEN
+		assertThat(toPos).isEqualTo(originPos);
 	}
 
 	@Test

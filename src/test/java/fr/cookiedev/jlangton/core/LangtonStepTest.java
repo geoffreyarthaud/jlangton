@@ -1,6 +1,7 @@
 package fr.cookiedev.jlangton.core;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -42,6 +43,25 @@ public class LangtonStepTest {
 		verify(langtonMap).set(fromPos, true);
 		verify(langtonMap).toLeft(fromPos);
 		assertThat(actualToPos).isEqualTo(toPos);
+	}
+
+	@Test
+	public void givenFalseSquares_whenNextStepAndBack_thenNoChange() {
+		// GIVEN
+		final long fromPos = 0;
+		final long toPos = 1;
+		when(langtonMap.get(fromPos)).thenReturn(false).thenReturn(true);
+		when(langtonMap.toLeft(fromPos)).thenReturn(toPos);
+		when(langtonMap.backLeft(toPos)).thenReturn(fromPos);
+
+		// WHEN
+		final long intermediatePos = langtonAnt.move(fromPos);
+		final long finalPos = langtonAnt.back(intermediatePos);
+
+		// THEN
+		verify(langtonMap).set(fromPos, true);
+		verify(langtonMap).set(fromPos, false);
+		assertThat(finalPos).isEqualTo(fromPos);
 	}
 
 	@Test

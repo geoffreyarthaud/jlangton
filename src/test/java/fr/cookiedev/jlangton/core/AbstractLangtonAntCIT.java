@@ -1,6 +1,7 @@
 package fr.cookiedev.jlangton.core;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -154,6 +155,32 @@ public abstract class AbstractLangtonAntCIT {
 
 		// THEN
 		assertThat(doubleCycle).contains(CYCLE_PATH);
+
+	}
+
+	@Test
+	public void givenACorrectPath_whenApplyPath_ThenNoException() {
+		// GIVEN
+		LangtonPathToMap pathToMap = new LangtonPathToMap(langtonMap);
+		String correctPath = "00001";
+		long fromPos = langtonMap.fromXY(X_SIZE / 2, Y_SIZE / 2);
+
+		// WHEN
+		LangtonMap outLangtonMap = pathToMap.applyPath(correctPath, fromPos);
+
+		// THEN
+		assertThat(outLangtonMap.get(fromPos)).isFalse();
+	}
+
+	@Test
+	public void givenAnIncorrectPath_whenApplyPath_ThenException() {
+		// GIVEN
+		LangtonPathToMap pathToMap = new LangtonPathToMap(langtonMap);
+		String incorrectPath = "00000";
+		long fromPos = langtonMap.fromXY(X_SIZE / 2, Y_SIZE / 2);
+
+		// WHEN-THEN
+		assertThrows(IllegalArgumentException.class, () -> pathToMap.applyPath(incorrectPath, fromPos));
 
 	}
 }

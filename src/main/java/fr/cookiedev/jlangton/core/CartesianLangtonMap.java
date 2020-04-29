@@ -7,4 +7,12 @@ public interface CartesianLangtonMap extends LangtonMap {
 	public int toX(long pos);
 
 	public int toY(long pos);
+
+	public int getMinX();
+
+	public int getMinY();
+	
+	public int getMaxX();
+	
+	public int getMaxY();
 }

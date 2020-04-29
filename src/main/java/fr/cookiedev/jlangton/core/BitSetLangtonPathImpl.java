@@ -6,11 +6,13 @@ public class BitSetLangtonPathImpl implements LangtonPath {
 
 	public static final int CYCLE_LENGTH = 104;
 
-	private final BitSet path = new BitSet();
+	private BitSet path = new BitSet();
 
 	private int size = 0;
 
 	private int cyclingStart = 0;
+
+	private int backCyclingStart = 0;
 
 	@Override
 	public long getSize() {
@@ -73,6 +75,35 @@ public class BitSetLangtonPathImpl implements LangtonPath {
 			buffer.append(path.get(i) ? '1' : '0');
 		}
 		return buffer.toString();
+	}
+
+	@Override
+	public void backAdd(boolean value) {
+		cyclingStart++;
+		if (size >= CYCLE_LENGTH && value != path.get(CYCLE_LENGTH - 1)) {
+			backCyclingStart = 0;
+		} else {
+			backCyclingStart++;
+		}
+		BitSet newPath = new BitSet(++size);
+		path.stream().forEach(i -> newPath.set(i + 1));
+		newPath.set(0, value);
+		path = newPath;
+	}
+
+	@Override
+	public boolean isBackCycling() {
+		return backCyclingStart - CYCLE_LENGTH >= CYCLE_LENGTH;
+	}
+
+	@Override
+	public long getBackCyclingStart() {
+		return backCyclingStart;
+	}
+
+	@Override
+	public long getNbBackCycles() {
+		return isBackCycling() ? (backCyclingStart - CYCLE_LENGTH) / CYCLE_LENGTH : 0;
 	}
 
 }

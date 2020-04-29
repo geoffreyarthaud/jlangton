@@ -2,25 +2,35 @@ package fr.cookiedev.jlangton.core;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class LangtonPathToMap {
-    final LangtonMap initialLangtonMap;
+    final Supplier<CartesianLangtonMap> mapSupplier;
 
     final Map<Long, Boolean> currentMap;
 
-    public LangtonPathToMap(LangtonMap initialLangtonMap) {
-        this.initialLangtonMap = initialLangtonMap;
+    public LangtonPathToMap(Supplier<CartesianLangtonMap> mapSupplier) {
+        this.mapSupplier = mapSupplier;
         this.currentMap = new HashMap<>();
     }
 
-    public LangtonMap applyPath(String path, long fromPos) {
+    public CartesianLangtonMap applyPath(String path, long fromPos) {
+        CartesianLangtonMap initialLangtonMap = mapSupplier.get();
         for (int index = 0; index < path.length(); index++) {
-            fromPos = move(path.charAt(index) == '1', fromPos);
+            fromPos = move(path.charAt(index) == '1', initialLangtonMap, fromPos);
         }
         return initialLangtonMap;
     }
 
-    public long move(boolean isRight, long fromPos) {
+    public CartesianLangtonMap applyBackPath(String path, long fromPos) {
+        CartesianLangtonMap initialLangtonMap = mapSupplier.get();
+        for (int index = path.length() - 1; index >= 0; index--) {
+            fromPos = back(path.charAt(index) == '1', initialLangtonMap, fromPos);
+        }
+        return initialLangtonMap;
+    }
+
+    public long move(boolean isRight, LangtonMap initialLangtonMap, long fromPos) {
         Boolean tile = currentMap.get(fromPos);
         if (tile == null) {
             initialLangtonMap.set(fromPos, isRight);
@@ -30,6 +40,30 @@ public class LangtonPathToMap {
 
         currentMap.put(fromPos, !isRight);
         return isRight ? initialLangtonMap.toRight(fromPos) : initialLangtonMap.toLeft(fromPos);
+    }
+
+    public long back(boolean isRight, LangtonMap initialLangtonMap, long fromPos) {
+        boolean backRight = !isRight;
+        long prevPos = initialLangtonMap.prev(fromPos);
+        Boolean tile = currentMap.get(prevPos);
+        if (tile == null) {
+            initialLangtonMap.set(prevPos, backRight);
+        } else if (backRight != tile) {
+            throw new IllegalArgumentException("Incorrect Move");
+        }
+
+        currentMap.put(prevPos, isRight);
+        return isRight ? initialLangtonMap.backRight(fromPos) : initialLangtonMap.backLeft(fromPos);
+    }
+
+    public CartesianLangtonMap symetricPath(String path, long fromPos) {
+        CartesianLangtonMap initialLangtonMap = applyPath(path, fromPos);
+        initialLangtonMap.resetOrientation();
+        for (int index = path.length() - 1; index >= 0; index--) {
+            fromPos = back(path.charAt(index) == '1', initialLangtonMap, fromPos);
+        }
+
+        return initialLangtonMap;
     }
 
 }

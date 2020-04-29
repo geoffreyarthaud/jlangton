@@ -125,4 +125,28 @@ public class RectLangtonMapImpl extends AbstractRectLangtonMap {
 		return fromXY((int) x, (int) y);
 	}
 
+	@Override
+	public LangtonMap cumulateSymetry(long centerPos) {
+		final int centerX = toX(centerPos);
+		final int centerY = toY(centerPos);
+		for (int curPos : grid.stream().toArray()) {
+			int curPosX = toX(curPos);
+			int curPosY = toY(curPos);
+			set(fromXY(2*centerX - curPosX, 2*centerY - curPosY), true);
+		}
+		return this;
+	}
+
+	@Override
+	public LangtonMap applySymetry(long centerPos) {
+		final int centerX = toX(centerPos);
+		final int centerY = toY(centerPos);
+		for (int curPos : grid.stream().toArray()) {
+			int curPosX = toX(curPos);
+			int curPosY = toY(curPos);
+			set(fromXY(2*centerX - curPosX, 2*centerY - curPosY), true);
+			set(curPos, false);
+		}
+		return this;
+	}
 }

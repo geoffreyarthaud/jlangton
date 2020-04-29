@@ -16,4 +16,10 @@ public interface LangtonMap {
 
 	long backRight(long fromPos);
 
+	void resetOrientation();
+
+	LangtonMap cumulateSymetry(long centerPos);
+
+	LangtonMap applySymetry(long centerPos);
+
 }

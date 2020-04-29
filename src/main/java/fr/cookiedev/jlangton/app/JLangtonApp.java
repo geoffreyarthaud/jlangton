@@ -2,6 +2,8 @@ package fr.cookiedev.jlangton.app;
 
 import fr.cookiedev.jlangton.core.BitSetLangtonPathImpl;
 import fr.cookiedev.jlangton.core.LangtonAnt;
+import fr.cookiedev.jlangton.core.LangtonPath;
+import fr.cookiedev.jlangton.core.LangtonPathToMap;
 import fr.cookiedev.jlangton.core.RectLangtonMapImpl;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -19,6 +21,9 @@ public class JLangtonApp extends Application {
 	public static final int RATIO = 4;
 	public static final int W_MAP = W_SCREEN / RATIO;
 	public static final int H_MAP = H_SCREEN / RATIO;
+	public static final long INIT_POS = W_MAP * H_MAP / 2 + W_MAP / 2;
+	boolean hasLogged = false;
+
 
 	public static void main(String[] args) {
 		Application.launch(args);
@@ -30,9 +35,10 @@ public class JLangtonApp extends Application {
 		final Canvas canvas = new Canvas(W_SCREEN, H_SCREEN);
 		final RectLangtonMapImpl langtonMap = new RectLangtonMapImpl(W_MAP, H_MAP);
 		final BitSetLangtonPathImpl path = new BitSetLangtonPathImpl();
+		//LangtonPathToMap pathToMap = new LangtonPathToMap(langtonMap);
 		final LangtonAnt langtonAnt = new LangtonAnt(langtonMap, path);
 		final AnimationTimer timer = new AnimationTimer() {
-			long langtonPos = W_MAP * H_MAP / 2 + W_MAP / 2;
+			long langtonPos = INIT_POS;
 			long iteration = 0;
 			int delta = 8;
 
@@ -48,9 +54,19 @@ public class JLangtonApp extends Application {
 					}
 				}
 				gc.fillText("n = " + iteration, 30, 30);
-				gc.fillText("Cycles = " + path.getNbCycles(), 30, 50);
-				gc.fillText("Cycle started at = " + path.getCyclingStart(), 30, 60);
-				langtonPos = langtonAnt.move(langtonPos, delta);
+				gc.fillText("Cycles = " + path.getNbBackCycles(), 30, 50);
+				gc.fillText("Cycle started at = " + path.getBackCyclingStart(), 30, 60);
+				if (path.getNbBackCycles() > 0) {
+					gc.fillText("Cycle code = " + path.getPath(path.getBackCyclingStart() - 103, 104), 30, 70);
+					if (!hasLogged) {
+						System.out.println(path.getPath(path.getBackCyclingStart() - 103, 104));
+						hasLogged = true;
+					}
+					
+				}
+				gc.setFill(Color.BLACK);
+				gc.fillRect(langtonPos % W_MAP * RATIO, W_SCREEN - RATIO - langtonPos / W_MAP * RATIO, RATIO, RATIO);
+				langtonPos = langtonAnt.back(langtonPos, delta);
 				iteration += delta;
 			}
 		};

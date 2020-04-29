@@ -65,4 +65,29 @@ public class ListLangtonMapImpl extends AbstractRectLangtonMap {
 		return backRight(toX(fromPos), toY(fromPos));
 	}
 
+	@Override
+	public LangtonMap cumulateSymetry(long centerPos) {
+		int centerX = toX(centerPos);
+		int centerY = toY(centerPos);
+		for (long curPos: langtonTrueSet) {
+			int curPosX = toX(curPos);
+			int curPosY = toY(curPos);
+			langtonTrueSet.add(fromXY(2*centerX - curPosX, 2*centerY - curPosY));
+		}
+		return this;
+	}
+
+	@Override
+	public LangtonMap applySymetry(long centerPos) {
+		int centerX = toX(centerPos);
+		int centerY = toY(centerPos);
+		for (long curPos: (Long[])langtonTrueSet.toArray()) {
+			int curPosX = toX(curPos);
+			int curPosY = toY(curPos);
+			langtonTrueSet.add(fromXY(2*centerX - curPosX, 2*centerY - curPosY));
+			langtonTrueSet.remove(curPos);
+		}
+		return this;
+	}
+
 }

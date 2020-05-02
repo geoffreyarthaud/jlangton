@@ -16,10 +16,11 @@ public class PathSymetry {
 
     public static void main(String[] args) {
         // Get forward good config
+        LangtonPathToMap pathToMap = new LangtonPathToMap(ListLangtonMapImpl::new);
         final long fromPos = AbstractRectLangtonMap.encode(INIT_POS_X, INIT_POS_Y);
         for (int i = 0; i < LangtonPath.CYCLE_PATH.length(); i++) {
-            String curPath = LangtonPath.CYCLE_PATH.substring(i) + LangtonPath.CYCLE_PATH.substring(0, i);
-            CartesianLangtonMap langtonMap = new LangtonPathToMap(ListLangtonMapImpl::new).applyPath(curPath, fromPos);
+            String curPath = rotate(LangtonPath.CYCLE_PATH, i);
+            CartesianLangtonMap langtonMap = pathToMap.applyPath(curPath, fromPos);
             if (relativeX(langtonMap.getMinX()) >= 0 && relativeY(langtonMap.getMinY()) >= 0) {
                 System.out.println(MessageFormat.format("i = {0} - Frame : ({1}, {2}) ({3}, {4})",
                 i, relativeX(langtonMap.getMinX()),
@@ -29,8 +30,8 @@ public class PathSymetry {
 
         // Get backward good config
         for (int i = 0; i < LangtonPath.CYCLE_PATH.length(); i++) {
-            String curPath = LangtonPath.CYCLE_PATH.substring(i) + LangtonPath.CYCLE_PATH.substring(0, i);
-            CartesianLangtonMap langtonMap = new LangtonPathToMap(ListLangtonMapImpl::new).applyBackPath(curPath, fromPos);
+            String curPath = rotate(LangtonPath.CYCLE_PATH, i);
+            CartesianLangtonMap langtonMap = pathToMap.applyBackPath(curPath, fromPos);
             if (relativeX(langtonMap.getMaxX()) <= 0 && relativeY(langtonMap.getMaxY()) <= 0) {
                 System.out.println(MessageFormat.format("i = {0} - Frame : ({1}, {2}) ({3}, {4})",
                 i, relativeX(langtonMap.getMinX()),
@@ -38,26 +39,38 @@ public class PathSymetry {
             }
         }
 
-        // Get backward good config
+        int nbCorrectConfigs = 0;
+        int nbDiagNonCorrectConfigs = 0;
         for (int i = 0; i < LangtonPath.CYCLE_PATH.length(); i++) {
-            String curPath = LangtonPath.CYCLE_PATH.substring(i) + LangtonPath.CYCLE_PATH.substring(0, i);
-            try {
-                new LangtonPathToMap(ListLangtonMapImpl::new).symetricPath(curPath, fromPos);
-                System.out.println("i = {0} - Symetric Path OK");
-            } catch (IllegalArgumentException e) {
-                continue;
+            String prefixPath = rotate(LangtonPath.CYCLE_PATH, i);
+            for (int j = 0; j < LangtonPath.CYCLE_PATH.length(); j++) {
+                String suffixPath = rotate(LangtonPath.CYCLE_PATH, j);
+                CartesianLangtonMap langtonMap = pathToMap.checkApplyAndBack(duplicate(suffixPath, 10), duplicate(LangtonPath.backRevert(prefixPath),10), fromPos);
+                if (langtonMap != null) {
+                    System.out.println(MessageFormat.format("Found correct config : ({0},{1}) - Size : {2}", i, j, langtonMap.getAll().size()));
+                    nbCorrectConfigs++;
+                } else if (i == j) {
+                    nbDiagNonCorrectConfigs++;
+                }
             }
         }
 
-        String prefixPath = LangtonPath.CYCLE_PATH.substring(58) + LangtonPath.CYCLE_PATH.substring(0, 58);
-        String suffixPath = LangtonPath.CYCLE_PATH;
-        String testPath = prefixPath + suffixPath;
+        System.out.println("Found " + nbCorrectConfigs + " configs.");
+        System.out.println("Found " + nbDiagNonCorrectConfigs + " diag non correct configs.");
 
-        try {
-            CartesianLangtonMap langtonMap = new LangtonPathToMap(ListLangtonMapImpl::new).applyBackPath(testPath, fromPos);
-            System.out.println("Correct config : " + testPath);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Incorrect config !");
+        // Check Langton Map size
+        System.out.println("Size for CYCLE : " + pathToMap.applyBackPath(duplicate(LangtonPath.CYCLE_PATH, 15), fromPos).getAll().size());
+    }
+
+    public static String rotate(String original, int offset) {
+        return original.substring(offset) + original.substring(0, offset);
+    }
+
+    public static String duplicate(String original, int count) {
+        if (count <= 0) {
+            return "";
+        } else {
+            return original + duplicate(original, count - 1);
         }
     }
 

@@ -3,6 +3,7 @@ package fr.cookiedev.jlangton.core;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,5 +48,11 @@ public class LangtonPathTest {
 
 		// THEN
 		verify(langtonPath, times(1)).add(true);
+	}
+
+	@Test
+	public void testBackRevert() {
+		assertThat(LangtonPath.backRevert("0110")).isEqualTo("1001");
+		assertThat(LangtonPath.backRevert("0010")).isEqualTo("1011");
 	}
 }

@@ -2,6 +2,9 @@ package fr.cookiedev.jlangton.core;
 
 import java.text.MessageFormat;
 import java.util.BitSet;
+import java.util.Collection;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class RectLangtonMapImpl extends AbstractRectLangtonMap {
 
@@ -105,9 +108,8 @@ public class RectLangtonMapImpl extends AbstractRectLangtonMap {
 
 	private int checkRangePositiveInteger(long value) {
 		if (value < 0 || value > Integer.MAX_VALUE) {
-			throw new IllegalArgumentException(
-					MessageFormat.format("Value {0} is not a be positive integer less or equal than {1}",
-							value, Integer.MAX_VALUE));
+			throw new IllegalArgumentException(MessageFormat
+					.format("Value {0} is not a be positive integer less or equal than {1}", value, Integer.MAX_VALUE));
 		}
 		return (int) value;
 	}
@@ -132,7 +134,7 @@ public class RectLangtonMapImpl extends AbstractRectLangtonMap {
 		for (int curPos : grid.stream().toArray()) {
 			int curPosX = toX(curPos);
 			int curPosY = toY(curPos);
-			set(fromXY(2*centerX - curPosX, 2*centerY - curPosY), true);
+			set(fromXY(2 * centerX - curPosX, 2 * centerY - curPosY), true);
 		}
 		return this;
 	}
@@ -144,9 +146,14 @@ public class RectLangtonMapImpl extends AbstractRectLangtonMap {
 		for (int curPos : grid.stream().toArray()) {
 			int curPosX = toX(curPos);
 			int curPosY = toY(curPos);
-			set(fromXY(2*centerX - curPosX, 2*centerY - curPosY), true);
+			set(fromXY(2 * centerX - curPosX, 2 * centerY - curPosY), true);
 			set(curPos, false);
 		}
 		return this;
+	}
+
+	@Override
+	public Collection<Long> getAll() {
+		return grid.stream().mapToLong(i -> (long) i).boxed().collect(Collectors.toList());
 	}
 }

@@ -3,7 +3,6 @@ package fr.cookiedev.jlangton.core;
 import java.text.MessageFormat;
 import java.util.BitSet;
 import java.util.Collection;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class RectLangtonMapImpl extends AbstractRectLangtonMap {

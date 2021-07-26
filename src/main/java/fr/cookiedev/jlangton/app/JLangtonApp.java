@@ -2,8 +2,6 @@ package fr.cookiedev.jlangton.app;
 
 import fr.cookiedev.jlangton.core.BitSetLangtonPathImpl;
 import fr.cookiedev.jlangton.core.LangtonAnt;
-import fr.cookiedev.jlangton.core.LangtonPath;
-import fr.cookiedev.jlangton.core.LangtonPathToMap;
 import fr.cookiedev.jlangton.core.RectLangtonMapImpl;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
